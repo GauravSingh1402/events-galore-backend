@@ -1,36 +1,39 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
+const express=require('express');
+const mongoose = require('mongoose');
+const app=express();
 
-require("./db/conn");
 
-const app = express();
-
-dotenv.config({ path: "./config.env" });
-
-const PORT = process.env.PORT;
+require('./db/conn');
 
 app.use(express.json());
 
-app.use(require("./router/auth"));
 
-app.get("/", (req, res) => {
-	res.send("HELLO THERE");
+app.use(require('./router/auth'));
+
+
+
+
+app.get('/', (req,res)=> {
+    res.send('HELLO THERE');
+
 });
 
-const middleware = (req, res, next) => {
-	console.log("hello middle");
-	next();
-};
+const middleware =(req, res, next) =>
+{
+    console.log('hello middle')
+    next()
+}
 
-app.get("/signup", (req, res) => {
-	res.send("JOIN THE GALACTIC EMPIRE");
+app.get('/createv', (req,res)=> {
+    res.send('CREATE EVENT');
+
 });
 
-app.get("/about", middleware, (req, res) => {
-	res.send("DARTH SIDIOUS AND LORD VADER");
-});
+app.get('/about' ,middleware, (req,res)=> {
+    res.send('DARTH SIDIOUS AND LORD VADER');
 
-app.listen(PORT, () => {
-	console.log("server is running");
+});
+  
+app.listen(2000,()=>{
+    console.log('server is running');
 });

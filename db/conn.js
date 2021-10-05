@@ -1,12 +1,8 @@
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-dotenv.config({ path: "./config.env" });
+const mongoose =require('mongoose');
 
-const DB = process.env.DATABASE;
+const db='mongodb+srv://eventgalore:eventgalore@cluster0.kz4zp.mongodb.net/events_galore?retryWrites=true&w=majority'
 
-mongoose
-	.connect(DB)
-	.then(() => {
-		console.log("Connected to mongo!!!!!!!");
-	})
-	.catch((err) => console.log(err));
+mongoose.connect(db).then(()=> {
+    console.log('Connected to mongo!!!!!!!')
+}).catch((err)=> 
+    console.log(err));
