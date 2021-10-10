@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 	res.send("HELLO THERE from auth");
 });
 
-router.post("/createv", authenticate, async (req, res) => {
+router.post("/createv", async (req, res) => {
 	const {
 		title,
 		description,
@@ -87,6 +87,10 @@ router.post("/createv", authenticate, async (req, res) => {
 			console.log("ZA WARUDO");
 		})
 		.catch((err) => console.log(err));
+});
+
+router.get("/createv", authenticate, (req, res) => {
+	res.send(req.rootUser);
 });
 
 router.get("/event", (req, res) => {

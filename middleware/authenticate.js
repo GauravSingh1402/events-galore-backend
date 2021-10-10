@@ -9,7 +9,7 @@ const authenticate = async (req, res, next) => {
 			_id: verifyToken._id,
 			"tokens.token": token,
 		});
-		if (!currentUser) {
+		if (!rootUser) {
 			throw "User not found";
 		}
 		req.token = token;

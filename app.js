@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 dotenv.config({ path: "./config.env" });
+const cookieParser = require("cookie-parser");
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
@@ -8,6 +9,8 @@ const { cloudinary } = require("./utils/cloudinary");
 require("./db/conn");
 
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use(require("./router/auth"));
 
