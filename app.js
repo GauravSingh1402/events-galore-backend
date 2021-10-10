@@ -2,6 +2,8 @@ const express=require('express');
 const mongoose = require('mongoose');
 const app=express();
 
+const { cloudinary } = require('./utils/cloudinary');
+
 
 require('./db/conn');
 
@@ -9,6 +11,7 @@ app.use(express.json());
 
 
 app.use(require('./router/auth'));
+
 
 
 
@@ -29,6 +32,10 @@ app.get('/createv', (req,res)=> {
 
 });
 
+app.get('/event', (req,res) => {
+    res.send('EVENTS:');
+})
+
 app.get('/about' ,middleware, (req,res)=> {
     res.send('DARTH SIDIOUS AND LORD VADER');
 
@@ -37,3 +44,29 @@ app.get('/about' ,middleware, (req,res)=> {
 app.listen(2000,()=>{
     console.log('server is running');
 });
+
+
+app.use(express.static('public'));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+
+
+let imageurl="";
+
+app.post('/image', async (req, res) => {
+    try {
+        const fileStr = req.body.data;
+        const uploadResponse = await cloudinary.uploader.upload(fileStr, {
+            upload_preset: 'eventimages',
+        });
+        imageurl =uploadResponse.url;
+        res.send(imageurl);
+        console.log(imageurl);
+        
+    } catch (err) {
+        console.error(err);
+    }
+    });
+app.get('/image', (req, res) => res.send({imageurl}));
+
+

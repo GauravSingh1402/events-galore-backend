@@ -8,8 +8,7 @@ const eventSchema= new mongoose.Schema({
         required: true
     },
     image: {
-        data: Buffer,
-        contentType: String
+        type: String,required: true
     },
     description: {type:String,required:true},
     cost:{type:String},
@@ -26,6 +25,7 @@ const eventSchema= new mongoose.Schema({
     link:{type:String},
     date: {type:String, required:true},
     time: {type:String, required:true},
+    no_of_users:{type:Number}
 
 
 })

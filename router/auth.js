@@ -1,11 +1,12 @@
 const express=require('express');
 const router=express.Router();
-var mongodb=require('mongodb');
-var assert = require('assert');
+var MongoClient=require('mongodb').MongoClient;
+const app= express();
 
-require('../db/conn');
+
+const db='mongodb+srv://eventgalore:eventgalore@cluster0.kz4zp.mongodb.net/events_galore?retryWrites=true&w=majority'
 const  Event=require('../model/eventSchema');
-const { mongo } = require('mongoose');
+
 
 router.get('/', (req,res)=> {
     res.send('HELLO THERE from auth');
@@ -13,8 +14,10 @@ router.get('/', (req,res)=> {
 });
 
 
+
+
 router.post('/createv', async (req,res)=>{
-    const  { title, description, cost, venue, eventspeaker, contact, tags, ispaid, isoffline, link, isfeatured, date, time}=req.body;
+    const  { title, description, image, cost, venue, eventspeaker, contact, tags, ispaid, isoffline, link, isfeatured, date, time, no_of_users}=req.body;
   
     if( !title)
     {
@@ -59,7 +62,7 @@ router.post('/createv', async (req,res)=>{
     
     
        
-    const cevent=new Event({ title, description, cost, venue, eventspeaker, contact, tags, ispaid, isoffline, isfeatured,link, date, time});
+    const cevent=new Event({ title, description, image, cost, venue, eventspeaker, contact, tags, ispaid, isoffline, isfeatured,link, date, time, no_of_users});
     cevent.save().then(() =>
     {
         console.log('ZA WARUDO')
@@ -69,29 +72,32 @@ router.post('/createv', async (req,res)=>{
     
 });
 
-router.get('/event',function(req,res,next){
-        var created_events=[]
-        const url = 'mongodb://localhost:27017/';
-        MongoClient.connect(url).then((client) => {
-  
-            const connect = client.db(events_galore);
-          
-            // Connect to collection
-            const collection = connect
-                    .collection("events");
-          
-            // Fetching the records having 
-            // name as saini
-            collection.find()
-                .toArray().then((ans) => {
-                    console.log(ans);
-                });
-        }).catch((err) => {
-          
-            // Printing the error message
-            console.log(err.Message);
-        })
-        
+router.get('/event', (req,res)=> {
+    
+    MongoClient.connect(db, function(err, client) {
+        var db=client.db('events_galore');
+        if (err) throw err;
+        db.collection("events").find({isfeatured:"yes"}).toArray((err, result)=> {
+        if (err) throw err;
+        res.send(result)
+        });
+    });
 });
 
-module.exports=router;
+
+
+router.get('/date', (req,res)=> {
+    
+    MongoClient.connect(db, function(err, client) {
+        var db=client.db('events_galore');
+        if (err) throw err;
+        db.collection("events").find({isfeatured:"yes"}).sort({'id':1}).toArray((err, result)=> {
+        if (err) throw err;
+        res.send(result)
+        });
+    });
+});
+
+
+
+module.exports =router;
