@@ -123,8 +123,9 @@ router.get("/date", (req, res) => {
 router.post("/register", async (req, res) => {
 	const { firstname, lastname, username, email, password } = req.body;
 	try {
-		const userExists = await User.findOne({ email: email });
-		if (userExists) {
+		const emailExists = await User.findOne({ email: email });
+		const usernameExists = await User.findOne({ username: username });
+		if (emailExists || usernameExists) {
 			throw "Invalid Registration";
 		} else {
 			const user = new User({ firstname, lastname, username, email, password });
