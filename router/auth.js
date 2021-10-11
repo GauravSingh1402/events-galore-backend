@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 var MongoClient = require("mongodb").MongoClient;
+var object = require("mongodb").ObjectId;
 const authenticate = require("../middleware/authenticate");
 const app = express();
 
@@ -31,6 +32,7 @@ router.post("/createv", async (req, res) => {
 		date,
 		time,
 		no_of_users,
+        username,
 	} = req.body;
 
 	if (!title) {
@@ -63,6 +65,9 @@ router.post("/createv", async (req, res) => {
 	if (!time) {
 		console.log("enter time");
 	}
+    if (!username) {
+		console.log("enter username");
+	}
 
 	const cevent = new Event({
 		title,
@@ -80,6 +85,7 @@ router.post("/createv", async (req, res) => {
 		date,
 		time,
 		no_of_users,
+        username,
 	});
 	cevent
 		.save()
@@ -93,32 +99,64 @@ router.get("/createv", authenticate, (req, res) => {
 	res.send(req.rootUser);
 });
 
-router.get("/event", (req, res) => {
-	MongoClient.connect(db, function (err, client) {
-		var db = client.db("events_galore");
-		if (err) throw err;
-		db.collection("events")
-			.find({ isfeatured: "yes" })
-			.toArray((err, result) => {
-				if (err) throw err;
-				res.send(result);
-			});
-	});
+
+router.get('/event', (req,res)=> {
+    
+    MongoClient.connect(db, function(err, client) {
+        var db=client.db('events_galore');
+        if (err) throw err;
+        db.collection("events").find({}).sort({no_of_users:-1}).toArray((err, result)=> {
+        if (err) throw err;
+        res.send(result)
+        });
+    });
+});
+router.get('/eventweek', (req,res)=> {
+    
+    MongoClient.connect(db, function(err, client) {
+        var db=client.db('events_galore');
+        if (err) throw err;
+        db.collection("events").find({}).sort({date:1}).toArray((err, result)=> {
+        if (err) throw err;
+        res.send(result)
+        });
+    });
 });
 
-router.get("/date", (req, res) => {
-	MongoClient.connect(db, function (err, client) {
-		var db = client.db("events_galore");
-		if (err) throw err;
-		db.collection("events")
-			.find({ isfeatured: "yes" })
-			.sort({ id: 1 })
-			.toArray((err, result) => {
-				if (err) throw err;
-				res.send(result);
-			});
-	});
+router.put('/update',async(req,res)=>{
+    const register_count = req.body.register_count;
+    let eve_id = req.body._id;
+    console.log(eve_id);
+    console.log(register_count);
+    MongoClient.connect(db, function(err,client){
+        if (err) throw err;
+        var db = client.db('events_galore');
+        var update_id = {"_id":object(eve_id)};
+        var update_no = { $set:{no_of_users:register_count}};
+        db.collection("events").updateOne(update_id, update_no, function(err, res) {
+            if (err) throw err;
+            console.log("Id",update_id);
+            console.log("Updated Count",update_no);
+            console.log("1 document updated");
+          });
+    });
+})
+
+
+
+router.get('/bevent', (req,res)=> {
+    
+    MongoClient.connect(db, function(err, client) {
+        var db=client.db('events_galore');
+        if (err) throw err;
+        db.collection("events").find({isfeatured:"yes"}).toArray((err, result)=> {
+        if (err) throw err;
+        res.send(result)
+        });
+    });
 });
+
+
 
 router.post("/register", async (req, res) => {
 	const { firstname, lastname, username, email, password } = req.body;
