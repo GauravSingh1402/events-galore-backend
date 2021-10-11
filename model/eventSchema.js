@@ -25,9 +25,8 @@ const eventSchema= new mongoose.Schema({
     link:{type:String},
     date: {type:String, required:true},
     time: {type:String, required:true},
-    no_of_users:{type:Number}
-
-
+    no_of_users:{type:Number},
+    username:{type:String}
 })
 
 
