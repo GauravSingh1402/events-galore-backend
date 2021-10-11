@@ -90,6 +90,7 @@ router.post("/createv", async (req, res) => {
 	cevent
 		.save()
 		.then(() => {
+			res.status(200).send("Event Created");
 			console.log("ZA WARUDO");
 		})
 		.catch((err) => console.log(err));
