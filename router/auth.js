@@ -93,6 +93,11 @@ router.get("/createv", authenticate, (req, res) => {
 	res.send(req.rootUser);
 });
 
+router.get("/logout", authenticate, (req, res) => {
+	res.clearCookie("jwtoken", { path: "/" });
+	res.status(200).send("User logout");
+});
+
 router.get("/event", (req, res) => {
 	MongoClient.connect(db, function (err, client) {
 		var db = client.db("events_galore");
