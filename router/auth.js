@@ -102,6 +102,9 @@ router.get("/createv", authenticate, (req, res) => {
 router.get("/profile", authenticate, (req, res) => {
 	res.send(req.rootUser);
 });
+router.post("/profile", (req, res) => {
+	res.send(req.rootUser);
+});
 
 router.get("/logout", authenticate, (req, res) => {
 	res.clearCookie("jwtoken", { path: "/" });
