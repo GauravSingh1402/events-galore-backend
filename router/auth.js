@@ -99,6 +99,9 @@ router.post("/createv", async (req, res) => {
 router.get("/createv", authenticate, (req, res) => {
 	res.send(req.rootUser);
 });
+router.get("/profile", authenticate, (req, res) => {
+	res.send(req.rootUser);
+});
 
 router.get("/logout", authenticate, (req, res) => {
 	res.clearCookie("jwtoken", { path: "/" });
@@ -215,3 +218,8 @@ router.post("/login", async (req, res) => {
 });
 
 module.exports = router;
+
+//new route
+//user event
+//find events where username=current user
+//
