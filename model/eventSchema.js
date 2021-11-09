@@ -17,7 +17,7 @@ const eventSchema= new mongoose.Schema({
     contact:{type:String, required:true},
     tags:
         {
-            type:String,
+            type:Array,
         },
     ispaid:{type:String, required:true},
     isoffline:{type:String, required:true},
