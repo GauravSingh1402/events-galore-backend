@@ -7,6 +7,7 @@ var object = require("mongodb").ObjectId;
 const authenticate = require("../middleware/authenticate");
 const app = express();
 
+
 const db =
 	"mongodb+srv://eventgalore:eventgalore@cluster0.kz4zp.mongodb.net/events_galore?retryWrites=true&w=majority";
 const Event = require("../model/eventSchema");
@@ -14,6 +15,8 @@ const User = require("../model/userSchema");
 router.get("/", (req, res) => {
 	res.send("HELLO THERE from auth");
 });
+
+
 
 router.post("/createv", async (req, res) => {
 	const {
@@ -124,6 +127,59 @@ router.get("/event", (req, res) => {
 			});
 	});
 });
+
+router.get("/pevent", (req, res) => {
+	MongoClient.connect(db, function (err, client) {
+		var db = client.db("events_galore");
+		if (err) throw err;
+		db.collection("events")
+			.find({ispaid:"paid"})
+			.toArray((err, result) => {
+				if (err) throw err;
+				res.send(result);
+			});
+	});
+});
+
+router.get("/fevent", (req, res) => {
+	MongoClient.connect(db, function (err, client) {
+		var db = client.db("events_galore");
+		if (err) throw err;
+		db.collection("events")
+			.find({ispaid:"free"})
+			.toArray((err, result) => {
+				if (err) throw err;
+				res.send(result);
+			});
+	});
+});
+
+router.get("/oevent", (req, res) => {
+	MongoClient.connect(db, function (err, client) {
+		var db = client.db("events_galore");
+		if (err) throw err;
+		db.collection("events")
+			.find({isoffline:"online"})
+			.toArray((err, result) => {
+				if (err) throw err;
+				res.send(result);
+			});
+	});
+});
+
+router.get("/ofevent", (req, res) => {
+	MongoClient.connect(db, function (err, client) {
+		var db = client.db("events_galore");
+		if (err) throw err;
+		db.collection("events")
+			.find({isoffline:"offline"})
+			.toArray((err, result) => {
+				if (err) throw err;
+				res.send(result);
+			});
+	});
+});
+
 router.get("/eventweek", (req, res) => {
 	MongoClient.connect(db, function (err, client) {
 		var db = client.db("events_galore");
