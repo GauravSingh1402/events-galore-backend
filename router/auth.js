@@ -132,25 +132,27 @@ router.get("/event", (req, res) => {
 
 user = "";
 
-router.post("/userevent", async (req, res) => {
-	console.log(req.body);
-	const u = req.body;
-	user = u.usern;
-	console.log(user);
-});
-
+router.post("/userevent", async (req,res)=>
+{
+    console.log(req.body)
+    const u=req.body
+    user=u.usern
+    console.log(user);
+})
 router.get("/usrevent", (req, res) => {
-	MongoClient.connect(db, function (err, client) {
-		var db = client.db("events_galore");
-		if (err) throw err;
-		db.collection("events")
-			.find({ username: user })
-			.toArray((err, result) => {
-				if (err) throw err;
-				res.send(result);
-			});
-	});
-});
+    MongoClient.connect(db, function (err, client) {
+		console.log('hi',user);
+        var db = client.db("events_galore");
+        if (err) throw err;
+        db.collection("events")
+            .find({username:user})
+            .toArray((err, result) => {
+                if (err) throw err;
+                res.send(result);
+            });
+    });
+
+})
 
 router.get("/pevent", (req, res) => {
 	MongoClient.connect(db, function (err, client) {
