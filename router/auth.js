@@ -7,7 +7,6 @@ var object = require("mongodb").ObjectId;
 const authenticate = require("../middleware/authenticate");
 const app = express();
 
-
 const db =
 	"mongodb+srv://eventgalore:eventgalore@cluster0.kz4zp.mongodb.net/events_galore?retryWrites=true&w=majority";
 const Event = require("../model/eventSchema");
@@ -126,6 +125,29 @@ router.get("/event", (req, res) => {
 				res.send(result);
 			});
 	});
+});
+
+user=""
+
+router.post("/userevent", async (req,res)=>
+{
+	console.log(req.body)
+	const u=req.body
+	user=u.usern
+	console.log(user);
+})
+router.get("/usrevent", (req, res) => {
+	MongoClient.connect(db, function (err, client) {
+		var db = client.db("events_galore");
+		if (err) throw err;
+		db.collection("events")
+			.find({username:user})
+			.toArray((err, result) => {
+				if (err) throw err;
+				res.send(result);
+			});
+	});
+
 });
 
 router.get("/pevent", (req, res) => {

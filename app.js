@@ -5,11 +5,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const { cloudinary } = require("./utils/cloudinary");
-const bodyParser = require('body-parser');
 
 require("./db/conn");
 
-app.use(express.json());
 
 app.use(cookieParser());
 
@@ -38,8 +36,8 @@ app.listen(2000, () => {
 
 app.use(express.static("public"));
 
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 let imageurl = "";
 
@@ -57,3 +55,6 @@ app.post("/image", async (req, res) => {
 	}
 });
 app.get("/image", (req, res) => res.send({ imageurl }));
+
+
+
