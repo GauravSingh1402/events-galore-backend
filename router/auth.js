@@ -14,6 +14,11 @@ router.get("/", (req, res) => {
 	res.send("HELLO THERE from auth");
 });
 
+// router.post("/profile", async (req, res) => {
+// 	const { firstname, lastname, username, email, password } = req.body;
+// 	console.log(firstname);
+// 	res.status(200).send("Success");
+// });
 
 router.post("/createv", async (req, res) => {
 	const {
@@ -125,7 +130,7 @@ router.get("/event", (req, res) => {
 	});
 });
 
-user=""
+user = "";
 
 router.post("/userevent", async (req,res)=>
 {
@@ -154,7 +159,7 @@ router.get("/pevent", (req, res) => {
 		var db = client.db("events_galore");
 		if (err) throw err;
 		db.collection("events")
-			.find({ispaid:"paid"})
+			.find({ ispaid: "paid" })
 			.toArray((err, result) => {
 				if (err) throw err;
 				res.send(result);
@@ -167,7 +172,7 @@ router.get("/fevent", (req, res) => {
 		var db = client.db("events_galore");
 		if (err) throw err;
 		db.collection("events")
-			.find({ispaid:"free"})
+			.find({ ispaid: "free" })
 			.toArray((err, result) => {
 				if (err) throw err;
 				res.send(result);
@@ -180,7 +185,7 @@ router.get("/oevent", (req, res) => {
 		var db = client.db("events_galore");
 		if (err) throw err;
 		db.collection("events")
-			.find({isoffline:"online"})
+			.find({ isoffline: "online" })
 			.toArray((err, result) => {
 				if (err) throw err;
 				res.send(result);
@@ -193,7 +198,7 @@ router.get("/ofevent", (req, res) => {
 		var db = client.db("events_galore");
 		if (err) throw err;
 		db.collection("events")
-			.find({isoffline:"offline"})
+			.find({ isoffline: "offline" })
 			.toArray((err, result) => {
 				if (err) throw err;
 				res.send(result);
