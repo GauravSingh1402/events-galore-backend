@@ -6,7 +6,6 @@ var MongoClient = require("mongodb").MongoClient;
 var object = require("mongodb").ObjectId;
 const authenticate = require("../middleware/authenticate");
 const app = express();
-
 const db =
 	"mongodb+srv://eventgalore:eventgalore@cluster0.kz4zp.mongodb.net/events_galore?retryWrites=true&w=majority";
 const Event = require("../model/eventSchema");
@@ -14,7 +13,6 @@ const User = require("../model/userSchema");
 router.get("/", (req, res) => {
 	res.send("HELLO THERE from auth");
 });
-
 
 
 router.post("/createv", async (req, res) => {
@@ -135,7 +133,8 @@ router.post("/userevent", async (req,res)=>
 	const u=req.body
 	user=u.usern
 	console.log(user);
-})
+});
+
 router.get("/usrevent", (req, res) => {
 	MongoClient.connect(db, function (err, client) {
 		var db = client.db("events_galore");

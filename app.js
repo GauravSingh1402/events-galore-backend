@@ -8,6 +8,7 @@ const { cloudinary } = require("./utils/cloudinary");
 
 require("./db/conn");
 
+app.use(express.json())
 
 app.use(cookieParser());
 
