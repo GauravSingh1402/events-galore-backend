@@ -248,6 +248,34 @@ router.put("/update", async (req, res) => {
 	});
 });
 
+router.get("/event", (req, res) => {
+	MongoClient.connect(db, function (err, client) {
+		var db = client.db("events_galore");
+		if (err) throw err;
+		db.collection("events")
+			.find({})
+			.sort({ no_of_users: -1 })
+			.toArray((err, result) => {
+				if (err) throw err;
+				res.send(result);
+			});
+	});
+});
+
+router.get("/eventweek", (req, res) => {
+	MongoClient.connect(db, function (err, client) {
+		var db = client.db("events_galore");
+		if (err) throw err;
+		db.collection("events")
+			.find({})
+			.sort({ date: 1 })
+			.toArray((err, result) => {
+				if (err) throw err;
+				res.send(result);
+			});
+	});
+});
+
 router.get("/bevent", (req, res) => {
 	MongoClient.connect(db, function (err, client) {
 		var db = client.db("events_galore");
