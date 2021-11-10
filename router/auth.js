@@ -40,65 +40,72 @@ router.post("/createv", async (req, res) => {
 		username,
 	} = req.body;
 
-	if (!title) {
-		return res.status(422).json({ error: "fill the title" });
-	}
-	if (!description) {
-		return res.status(422).json({ error: "fill the description" });
-	}
-	if (!eventspeaker) {
-		return res.status(422).json({ error: "fill the fields" });
-	}
-	if (!contact) {
-		return res.status(422).json({ error: "fill the contact" });
-	}
-	if (!tags) {
-		console.log("enter tag");
-	}
-	if (!ispaid) {
-		console.log("enter paid");
-	}
-	if (!isoffline) {
-		console.log("enter offline");
-	}
-	if (!isfeatured) {
-		console.log("enter featured");
-	}
-	if (!date) {
-		console.log("enter date");
-	}
-	if (!time) {
-		console.log("enter time");
-	}
-	if (!username) {
-		console.log("enter username");
-	}
+	// if (!title) {
+	// 	return res.status(422).json({ error: "fill the title" });
+	// }
+	// if (!description) {
+	// 	return res.status(422).json({ error: "fill the description" });
+	// }
+	// if (!eventspeaker) {
+	// 	return res.status(422).json({ error: "fill the fields" });
+	// }
+	// if (!contact) {
+	// 	return res.status(422).json({ error: "fill the contact" });
+	// }
+	// if (!tags) {
+	// 	console.log("enter tag");
+	// }
+	// if (!ispaid) {
+	// 	console.log("enter paid");
+	// }
+	// if (!isoffline) {
+	// 	console.log("enter offline");
+	// }
+	// if (!isfeatured) {
+	// 	console.log("enter featured");
+	// }
+	// if (!date) {
+	// 	console.log("enter date");
+	// }
+	// if (!time) {
+	// 	console.log("enter time");
+	// }
+	// if (!username) {
+	// 	console.log("enter username");
+	// }
 
-	const cevent = new Event({
-		title,
-		description,
-		image,
-		cost,
-		venue,
-		eventspeaker,
-		contact,
-		tags,
-		ispaid,
-		isoffline,
-		isfeatured,
-		link,
-		date,
-		time,
-		no_of_users,
-		username,
-	});
-	cevent
-		.save()
-		.then(() => {
-			res.status(200).send("Event Created");
-			console.log("ZA WARUDO");
-		})
-		.catch((err) => console.log(err));
+	try {
+		const cevent = new Event({
+			title,
+			description,
+			image,
+			cost,
+			venue,
+			eventspeaker,
+			contact,
+			tags,
+			ispaid,
+			isoffline,
+			isfeatured,
+			link,
+			date,
+			time,
+			no_of_users,
+			username,
+		});
+		cevent
+			.save()
+			.then(() => {
+				console.log("ZA WARUDO");
+				return res.status(200).json({ Success: "Event Created" });
+			})
+			.catch((err) => {
+				return res.status(400).json({ Error: "Error creating event" });
+			});
+	} catch (error) {
+		console.log(error);
+		return res.status(400).json({ Error: "Error creating event" });
+	}
 });
 
 router.get("/createv", authenticate, (req, res) => {
@@ -132,27 +139,25 @@ router.get("/event", (req, res) => {
 
 user = "";
 
-router.post("/userevent", async (req,res)=>
-{
-    console.log(req.body)
-    const u=req.body
-    user=u.usern
-    console.log(user);
-})
+router.post("/userevent", async (req, res) => {
+	console.log(req.body);
+	const u = req.body;
+	user = u.usern;
+	console.log(user);
+});
 router.get("/usrevent", (req, res) => {
-    MongoClient.connect(db, function (err, client) {
-		console.log('hi',user);
-        var db = client.db("events_galore");
-        if (err) throw err;
-        db.collection("events")
-            .find({username:user})
-            .toArray((err, result) => {
-                if (err) throw err;
-                res.send(result);
-            });
-    });
-
-})
+	MongoClient.connect(db, function (err, client) {
+		console.log("hi", user);
+		var db = client.db("events_galore");
+		if (err) throw err;
+		db.collection("events")
+			.find({ username: user })
+			.toArray((err, result) => {
+				if (err) throw err;
+				res.send(result);
+			});
+	});
+});
 
 router.get("/pevent", (req, res) => {
 	MongoClient.connect(db, function (err, client) {
