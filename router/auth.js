@@ -5,6 +5,8 @@ const bcrypt = require("bcryptjs");
 var MongoClient = require("mongodb").MongoClient;
 var object = require("mongodb").ObjectId;
 const authenticate = require("../middleware/authenticate");
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
 const app = express();
 const db =
 	"mongodb+srv://eventgalore:eventgalore@cluster0.kz4zp.mongodb.net/events_galore?retryWrites=true&w=majority";
@@ -14,6 +16,53 @@ router.get("/", (req, res) => {
 	res.send("HELLO THERE from auth");
 });
 
+
+router.post("/payment",async(req,res)=>{
+	try{
+		const instance = new Razorpay({
+			key_id:process.env.KEY_ID,
+			key_secret:process.env.KEY_SECRET_KEY,
+		});
+		const options = {
+			amount:req.body.amount*100,
+			currency:"INR",
+			receipt: crypto.randomBytes(10).toString("hex"),
+		};
+		instance.orders.create(options,(error,order)=> {
+			if (error)
+			{
+				console.log(error);
+				return res.status(500).json({message: "Something went Wrong"});
+			}
+			return res.status(200).json({ data: order });
+		});
+	}
+	catch(error)
+	{
+		console.log(error);
+		res.status(500).json({ message:"Internal Server Error" });
+	}
+})
+
+router.post("/verify",async(req,res)=>
+{
+	const{
+		razorpay_order_id,
+		razorpay_payment_id,
+		razorpay_signature
+	} = req.body;
+	const sign = razorpay_order_id + "|" + razorpay_payment_id;
+	const expectedSign = crypto.createHmac("sha256",process.env.KEY_SECRET_KEY).update(sign.toString()).digest("hex");
+	if (razorpay_signature === expectedSign)
+	{
+		return res.status(200).json("Successfull Payment")
+	}
+	else
+	{
+		return res.status(500).json({"message":"Invalid Signature sent"})
+	}
+
+})
 // router.post("/profile", async (req, res) => {
 // 	const { firstname, lastname, username, email, password } = req.body;
 // 	console.log(firstname);
