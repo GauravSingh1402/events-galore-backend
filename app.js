@@ -3,16 +3,24 @@ dotenv.config({ path: "./config.env" });
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const mongoose = require("mongoose");
+
 const app = express();
 const { cloudinary } = require("./utils/cloudinary");
 
 require("./db/conn");
-
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
 
 app.use(cookieParser());
+
+app.use((req, res, next) => {
+	res.header(
+		"Access-Control-Allow-Origin",
+		"https://events-galore-frontend.vercel.app"
+	);
+	next();
+});
 
 app.use(require("./router/auth"));
 
