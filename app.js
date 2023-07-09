@@ -8,8 +8,8 @@ const { cloudinary } = require("./utils/cloudinary");
 
 require("./db/conn");
 
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(express.json());
 
 app.use(cookieParser());
@@ -25,6 +25,8 @@ app.use(require("./router/auth"));
 // 	next();
 // };
 
+const PORT = 2000;
+
 app.get("/createv", (req, res) => {
 	res.send("CREATE EVENT");
 });
@@ -33,13 +35,11 @@ app.get("/event", (req, res) => {
 	res.send("EVENTS:");
 });
 
-app.listen(2000, () => {
-	console.log("server is running");
+app.listen(PORT, () => {
+	console.log("server is running on " + PORT);
 });
 
 app.use(express.static("public"));
-
-
 
 let imageurl = "";
 
@@ -57,6 +57,3 @@ app.post("/image", async (req, res) => {
 	}
 });
 app.get("/image", (req, res) => res.send({ imageurl }));
-
-
-
